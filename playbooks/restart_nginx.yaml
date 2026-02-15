@@ -1,0 +1,26 @@
+---
+- name: Playbook to restart nginx service
+  hosts: "{{ host }}"
+  gather_facts: false
+  vars:
+    service: "nginx"
+  tasks:
+    - name: Start of Block
+      block:
+        - name: Check the status of NGINX service
+          ansible.builtin.service:
+            name: "{{ service }}"
+          register: output
+
+        - name: Start NGINX service
+          ansible.builtin.service:
+            name: "{{ service }}"
+            state: started
+          when: output.status.ActiveState == "inactive"
+      become: true
+ 
+      rescue:
+        - name: Handling Errors
+          ansible.builtin.debug:
+            msg: "An Error occurred while remediating the alert"
+

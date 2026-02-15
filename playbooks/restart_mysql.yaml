@@ -1,0 +1,26 @@
+---
+- name: Playbook to restart mysql service
+  hosts: "{{ host }}"
+  gather_facts: false
+  vars:
+    service: "mysql"
+  tasks:
+    - name: Start of Block
+      block:
+        - name: Check the status of MySQL service
+          ansible.builtin.service:
+            name: "{{ service }}"
+          register: output
+
+        - name: Start MySQL service
+          ansible.builtin.service:
+            name: "{{ service }}"
+            state: started
+          when: output.status.ActiveState == 'inactive'
+          become: true
+
+      rescue:
+        - name: Handling Errors
+          ansible.builtin.debug:
+            msg: "An Error occurred while remediating the alert"
+

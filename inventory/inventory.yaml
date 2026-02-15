@@ -1,0 +1,17 @@
+---
+all:
+  vars:
+    ansible_user: ansible
+    ansible_become: true
+    ansible_become_method: sudo
+    ansible_python_interpreter: "/usr/bin/python3"
+
+  children:
+    lab:
+      hosts:
+        ansiblevagrantlab01:
+          ansible_host: 192.168.58.101
+        ansiblevagrantlab02:
+          ansible_host: 192.168.58.102
+        ansiblevagrantlab03:
+          ansible_host: 192.168.58.103

@@ -1,0 +1,23 @@
+---
+- name: Ansible Rulebook Listener
+  hosts: all
+  sources: 
+    - ansible.eda.webhook:
+        host: 0.0.0.0
+        port: 5050
+  rules:
+    - name: Remediate when NGINX is Critical
+      condition: event.payload.service == "nginx" and event.payload.severity == 'CRITICAL'
+      action:
+        run_playbook:
+          name: ./playbooks/restart_nginx.yaml
+          extra_vars:
+            host: "{{ event.payload.host }}"
+    
+    - name: Remediate when MySQL is Critical
+      condition: event.payload.service == "mysql" and event.payload.severity == "CRITICAL"
+      action:
+        run_playbook: 
+          name: ./playbooks/restart_mysql.yaml
+          extra_vars:
+            host: "{{ event.payload.host }}"

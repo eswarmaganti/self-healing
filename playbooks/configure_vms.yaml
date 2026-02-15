@@ -1,5 +1,5 @@
 ---
-- name: Install Nginx Web Server
+- name: Configure the Lab Environment
   hosts: all
   gather_facts: false
   vars:
